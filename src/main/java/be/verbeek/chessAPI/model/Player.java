@@ -1,8 +1,7 @@
 package be.verbeek.chessAPI.model;
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
@@ -17,15 +16,39 @@ public class Player  implements Serializable {
     @NotBlank
     private String name;
 
-    public Player(long id, String name) {
-        this.id = id;
-        this.name = name;
+    // the score of the player
+    @Min(0)
+    private int elo = 1000;
+
+    @Min(0)
+    private int wins;
+
+    @Min(0)
+    private int losses;
+
+    public int getElo() {
+        return elo;
     }
 
-    public Player() {
-
+    public void setElo(int elo) {
+        this.elo = elo;
     }
 
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
 
     public Long getId() {
         return id;
