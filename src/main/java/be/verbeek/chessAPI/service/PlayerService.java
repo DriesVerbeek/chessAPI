@@ -1,11 +1,9 @@
 package be.verbeek.chessAPI.service;
 
+import be.verbeek.chessAPI.exceptions.EntryNotFoundException;
 import be.verbeek.chessAPI.model.Player;
 import be.verbeek.chessAPI.repository.PlayerRepository;
-import javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
@@ -13,7 +11,6 @@ import java.util.List;
 @Service
 public class PlayerService {
 
-    //TODO: fix autowired
     @Autowired
     private PlayerRepository playerRepository;
 
@@ -29,15 +26,15 @@ public class PlayerService {
      *  get a player
      * @param id the id of the player
      * @return the player with that id
-     * @throws NotFoundException when player is not found
+     * @throws EntryNotFoundException if player is not found
      */
-    public Player getPlayerById(Long id){
-        return playerRepository.findById(id).orElse(null);
+    public Player getPlayerById(Long id) throws EntryNotFoundException {
+        return playerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Player", "id", id.toString()));
     }
 
     /**
-     *
-     * @return all players sorted by their elo, in desc. order
+     * ranks all players by elo
+     * @return all players
      */
     public List<Player> getPlayersByRanking(){
         List<Player> players = playerRepository.findAll();
@@ -58,11 +55,10 @@ public class PlayerService {
      * deletes a player from the DB
      * @param id the id of the player
      * @return true if deleted, else false
+     * @throws EntryNotFoundException when player is not found
      */
-    public boolean deletePlayer(Long id){
-        Player player = playerRepository.findById(id).orElse(null);
-        if (player == null)
-            return false;
+    public boolean deletePlayer(Long id) throws EntryNotFoundException {
+        Player player = playerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Player", "id", id.toString()));
         playerRepository.delete(player);
         return true;
     }
@@ -73,12 +69,10 @@ public class PlayerService {
      * @param id the id of the player
      * @param playerDetails the players new details
      * @return the updated player
+     * @throws EntryNotFoundException if player is not found
      */
-    public Player updatePlayerDetails(Long id, Player playerDetails) {
-        Player player = playerRepository.findById(id).orElse(null);
-        if (player == null)
-            return null;
-
+    public Player updatePlayerDetails(Long id, Player playerDetails)  throws EntryNotFoundException{
+        Player player = playerRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("Player", "id", id.toString()));;
         player.setName(playerDetails.getName());
 
         return playerRepository.save(player);

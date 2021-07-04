@@ -23,11 +23,11 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public Player getPlayerById(@PathVariable(value= "id") Long id) {
+    public Player getPlayerById(@PathVariable(value= "id") Long id)  throws EntryNotFoundException{
         Player player = playerService.getPlayerById(id);
         if (player != null)
             return player;
-        throw new EntryNotFoundException();
+        return null;
     }
 
     @GetMapping("/ranking")
@@ -41,18 +41,15 @@ public class PlayerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePlayer(@PathVariable(value = "id") Long id){
+    public ResponseEntity<?> deletePlayer(@PathVariable(value = "id") Long id) throws EntryNotFoundException{
         if (playerService.deletePlayer(id))
             return ResponseEntity.ok().build();
-        return ResponseEntity.notFound().build();
+        return null;
     }
 
     @PutMapping("/{id}/details")
-    public Player updatePlayerDetails(@PathVariable(value = "id") Long id, @Valid @RequestBody Player playerDetails){
-        Player updatedPlayer = playerService.updatePlayerDetails(id, playerDetails);
-        if (updatedPlayer == null)
-            throw new EntryNotFoundException();
-        return updatedPlayer;
+    public Player updatePlayerDetails(@PathVariable(value = "id") Long id, @Valid @RequestBody Player playerDetails) throws EntryNotFoundException{
+        return playerService.updatePlayerDetails(id, playerDetails);
     }
 
 

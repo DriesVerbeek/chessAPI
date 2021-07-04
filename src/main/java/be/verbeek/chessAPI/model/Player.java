@@ -16,6 +16,7 @@ public class Player  implements Serializable {
     @NotBlank
     private String name;
 
+    // the score of the player
     @Min(0)
     private int elo = 1000;
 
@@ -24,11 +25,6 @@ public class Player  implements Serializable {
 
     @Min(0)
     private int losses;
-
-
-    public Player() {
-
-    }
 
     public int getElo() {
         return elo;
