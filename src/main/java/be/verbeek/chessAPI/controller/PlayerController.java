@@ -1,11 +1,10 @@
 package be.verbeek.chessAPI.controller;
 
 import be.verbeek.chessAPI.model.Player;
-import be.verbeek.chessAPI.repository.PlayerRepository;
+import be.verbeek.chessAPI.service.PlayerService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -13,17 +12,28 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
 
+    //TODO DI
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerService playerService;
 
     @GetMapping
     public List<Player> getAllPlayers(){
-        return playerRepository.findAll();
+        return playerService.getAllPlayers();
+    }
+
+    @GetMapping("/{id}")
+    public Player getPlayerById(@PathVariable(value= "id") Long id) throws NotFoundException {
+        return playerService.getPlayerById(id);
+    }
+
+    @GetMapping("/ranking")
+    public List<Player> getPlayersByRanking(){
+        return playerService.getPlayersByRanking();
     }
 
     @PostMapping
     public Player postPlayer(@Valid @RequestBody Player player){
-        return playerRepository.save(player);
+        return playerService.addNewPlayer(player);
     }
 
 
