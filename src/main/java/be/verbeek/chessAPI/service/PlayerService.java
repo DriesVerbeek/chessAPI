@@ -66,4 +66,21 @@ public class PlayerService {
         playerRepository.delete(player);
         return true;
     }
+
+    /**
+     * updates a players details (currently only the name)
+     * elo, wins, losses can not be changed by end users
+     * @param id the id of the player
+     * @param playerDetails the players new details
+     * @return the updated player
+     */
+    public Player updatePlayerDetails(Long id, Player playerDetails) {
+        Player player = playerRepository.findById(id).orElse(null);
+        if (player == null)
+            return null;
+
+        player.setName(playerDetails.getName());
+
+        return playerRepository.save(player);
+    }
 }

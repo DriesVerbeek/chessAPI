@@ -3,7 +3,6 @@ package be.verbeek.chessAPI.controller;
 import be.verbeek.chessAPI.exceptions.EntryNotFoundException;
 import be.verbeek.chessAPI.model.Player;
 import be.verbeek.chessAPI.service.PlayerService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +45,14 @@ public class PlayerController {
         if (playerService.deletePlayer(id))
             return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}/details")
+    public Player updatePlayerDetails(@PathVariable(value = "id") Long id, @Valid @RequestBody Player playerDetails){
+        Player updatedPlayer = playerService.updatePlayerDetails(id, playerDetails);
+        if (updatedPlayer == null)
+            throw new EntryNotFoundException();
+        return updatedPlayer;
     }
 
 
