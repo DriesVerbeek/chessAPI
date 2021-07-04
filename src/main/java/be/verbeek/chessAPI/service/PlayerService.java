@@ -31,8 +31,8 @@ public class PlayerService {
      * @return the player with that id
      * @throws NotFoundException when player is not found
      */
-    public Player getPlayerById(Long id) throws NotFoundException{
-        return playerRepository.findById(id).orElseThrow(() -> new NotFoundException("not found"));
+    public Player getPlayerById(Long id){
+        return playerRepository.findById(id).orElse(null);
     }
 
     /**

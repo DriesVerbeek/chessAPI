@@ -1,5 +1,6 @@
 package be.verbeek.chessAPI.controller;
 
+import be.verbeek.chessAPI.exceptions.EntryNotFoundException;
 import be.verbeek.chessAPI.model.Player;
 import be.verbeek.chessAPI.service.PlayerService;
 import javassist.NotFoundException;
@@ -23,7 +24,10 @@ public class PlayerController {
 
     @GetMapping("/{id}")
     public Player getPlayerById(@PathVariable(value= "id") Long id) throws NotFoundException {
-        return playerService.getPlayerById(id);
+        Player player = playerService.getPlayerById(id);
+        if (player != null)
+            return player;
+        throw new EntryNotFoundException();
     }
 
     @GetMapping("/ranking")
