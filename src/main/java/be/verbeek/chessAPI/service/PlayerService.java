@@ -53,4 +53,17 @@ public class PlayerService {
     public Player addNewPlayer(Player player){
         return playerRepository.save(player);
     }
+
+    /**
+     * deletes a player from the DB
+     * @param id the id of the player
+     * @return true if deleted, else false
+     */
+    public boolean deletePlayer(Long id){
+        Player player = playerRepository.findById(id).orElse(null);
+        if (player == null)
+            return false;
+        playerRepository.delete(player);
+        return true;
+    }
 }

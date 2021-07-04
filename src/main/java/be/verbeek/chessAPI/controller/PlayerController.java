@@ -5,6 +5,7 @@ import be.verbeek.chessAPI.model.Player;
 import be.verbeek.chessAPI.service.PlayerService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
@@ -23,7 +24,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public Player getPlayerById(@PathVariable(value= "id") Long id) throws NotFoundException {
+    public Player getPlayerById(@PathVariable(value= "id") Long id) {
         Player player = playerService.getPlayerById(id);
         if (player != null)
             return player;
@@ -38,6 +39,13 @@ public class PlayerController {
     @PostMapping
     public Player postPlayer(@Valid @RequestBody Player player){
         return playerService.addNewPlayer(player);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePlayer(@PathVariable(value = "id") Long id){
+        if (playerService.deletePlayer(id))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
     }
 
 
